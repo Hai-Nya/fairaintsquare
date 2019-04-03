@@ -99,7 +99,7 @@ int main(){
       it.show(window);
     }
 
-	myPlayer.move(myPlayer.movement);
+	myPlayer.updateMovement();
 	myPlayer.show(window);
 	writing myText("This is a test", 50, 50);
 	myText.show(window, text);

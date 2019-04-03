@@ -5,7 +5,6 @@ struct player: public npc{
 private:
 
 public:
-
   player(){
     base.setSize(sf::Vector2f(16, 16));
     base.setOrigin(8, 8);

@@ -2,11 +2,12 @@
 #define NPC_H
 
 #include "tiles.hpp"
+#include "physics.hpp"
 
-struct npc: public tile{
+struct npc: public tile, public physics{
 private:
   std::string name="";
-  unsigned int speed=1;
+  double speed=0.001;
   int maxSpeed=6;
   unsigned int runningSpeed=6;
 public:
@@ -30,47 +31,48 @@ public:
     name=input;
   }
 
-  //Put movement in private
   sf::Vector2f movement={0, 0};
   bool running=0;
 
   virtual void up(){
-    movement.y-=speed+(runningSpeed*running+1);
-    if(movement.y<-maxSpeed){
-      movement.y=-maxSpeed;
-    }
-    base.setTextureRect(sf::IntRect(17+16, 0, 16, 16));
+	changeAcceleration(0, -1*(speed+(runningSpeed*running+1)));
   }
 
   virtual void down(){
-    movement.y+=speed+(runningSpeed*running+1);
-    if(movement.y>maxSpeed){
-      movement.y=maxSpeed;
-    }
-    base.setTextureRect(sf::IntRect(0, 0, 16, 16));
+	changeAcceleration(0, speed+(runningSpeed*running+1));
   }
 
   virtual void left(){
-    movement.x-=speed+(runningSpeed*running+1);
-    if(movement.x<-maxSpeed){
-      movement.x=-maxSpeed;
-    }
-    base.setTextureRect(sf::IntRect(17, 0, 16, 16));
-    scale(1, 1);
+	changeAcceleration(-1*(speed+(runningSpeed*running+1)), 0);
   }
 
   void right(){
-    movement.x+=getSpeed()+(getRunningSpeed()*running+1);
-    if(movement.x>maxSpeed){
-      movement.x=maxSpeed;
-    }
-    base.setTextureRect(sf::IntRect(17, 0, 16, 16));
-    scale(-1, 1);
+	changeAcceleration(speed+(runningSpeed*running+1), 0);
   }
 
   void stop(){
     movement.x=0;
     movement.y=0;
+  }
+
+  void updateMovement(){
+	sf::Vector2f temp=updateVelocity();
+	if(temp.x<-maxSpeed){
+	  temp.x=-maxSpeed;
+	}
+	else if(temp.x>maxSpeed){
+	  temp.x=maxSpeed;
+	}
+	if(temp.y<-maxSpeed){
+	  temp.y=-maxSpeed;
+	}
+	else if(temp.y>maxSpeed){
+	  temp.y=maxSpeed;
+	}
+	move(temp.x, temp.y);
+    // if(movement.x<-maxSpeed){
+    //   movement.x=-maxSpeed;
+    // }
   }
 
   //Scaling is only ever used to flip the texture
