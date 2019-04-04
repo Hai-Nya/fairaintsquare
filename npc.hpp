@@ -11,6 +11,11 @@ private:
   int maxSpeed=6;
   unsigned int runningSpeed=6;
 public:
+
+  bool intersects(const tile& input){
+	return base.getGlobalBounds().intersects(input.base.getGlobalBounds());
+  }
+
   unsigned int getSpeed(){
     return speed;
   }
@@ -56,23 +61,20 @@ public:
   }
 
   void updateMovement(){
-	sf::Vector2f temp=updateVelocity();
-	if(temp.x<-maxSpeed){
-	  temp.x=-maxSpeed;
+	if(getVelocity().x<-maxSpeed){
+	  setVelocity(-maxSpeed, 0);
 	}
-	else if(temp.x>maxSpeed){
-	  temp.x=maxSpeed;
+	else if(getVelocity().x>maxSpeed){
+	  setVelocity(maxSpeed, 0);
 	}
-	if(temp.y<-maxSpeed){
-	  temp.y=-maxSpeed;
+	if(getVelocity().y<-maxSpeed){
+	  setVelocity(0, -maxSpeed);
 	}
-	else if(temp.y>maxSpeed){
-	  temp.y=maxSpeed;
+	else if(getVelocity().y>maxSpeed){
+	  setVelocity(0, maxSpeed);
 	}
-	move(temp.x, temp.y);
-    // if(movement.x<-maxSpeed){
-    //   movement.x=-maxSpeed;
-    // }
+	move(getVelocity().x, getVelocity().y);
+	updateVelocity();
   }
 
   //Scaling is only ever used to flip the texture
@@ -87,28 +89,21 @@ public:
 
   npc(){
     base.setSize(sf::Vector2f(16, 16));
-    //Origin to center to facilitate texture flipping
-    base.setOrigin(8, 8);
   }
 
   npc(int t_x, int t_y){
     base.setSize(sf::Vector2f(16, 16));
     base.move(sf::Vector2f(t_x, t_y));
-    //Origin to center to facilitate texture flipping
-    base.setOrigin(8, 8);
   }
 
   npc(int t_x, int t_y, std::string input){
     base.setSize(sf::Vector2f(16, 16));
     base.move(sf::Vector2f(t_x, t_y));
-    //Origin to center to facilitate texture flipping
-    base.setOrigin(8, 8);
     name=input;
   }
 
   npc(std::string input){
     base.setSize(sf::Vector2f(16, 16));
-    base.setOrigin(8, 8);
     name=input;
   }
 };

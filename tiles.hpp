@@ -13,6 +13,14 @@ struct tile{
     return base.getPosition().y;
   }
 
+  sf::Vector2f getPosition() const {
+	return base.getPosition();
+  }
+
+  sf::Vector2f getSize() const {
+	return base.getSize();
+  }
+
   void show(sf::RenderWindow &window){
     window.draw(base);
   }
@@ -38,6 +46,10 @@ struct tile{
 
   void setPosition(int t_x, int t_y){
     base.setPosition(sf::Vector2f(t_x, t_y));
+  }
+
+  void setPosition(const sf::Vector2f &input){
+    base.setPosition(input);
   }
 
   void move(int t_x, int t_y){
